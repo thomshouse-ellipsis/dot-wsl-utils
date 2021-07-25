@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Check to see if powershell exists
+if [ "$(command -v powershell.exe)" ]; then
+    # Check to see if we're already in an elevated shell
+    powershell.exe -command 'If (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("BUILTIN\Administrators")) {exit 1}'
+    if [ $? -ne 0 ]; then
+        # Open WSL inside elevated PowerShell
+        echo -e "\nOpening elevated PowerShell window to run the following command:\n    $@"
+        sleep 3
+        powershell.exe "Start-Process -Verb runas -FilePath wsl -ArgumentList '--', '$@'"
+        # Wait for user input in the original terminal...
+        sleep 1
+        echo ""
+        read -n 1 -s -r -p "When command has completed in PowerShell window, press any key to continue..."
+        read -s -t 0.001 # Clear any extra keycodes (e.g. arrows)
+        echo -e "\n"
+    else
+        $@
+    fi
+else
+    echo "Error: powershell.exe not available."
+    exit 1
+fi
