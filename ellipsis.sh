@@ -6,6 +6,6 @@ pkg.link() {
 
 pkg.unlink() {
     for file in "$PKG_PATH/bin"/*; do
-        rm "$ELLIPSIS_PATH/bin/$file"
+        rm "$ELLIPSIS_PATH/bin/$(basename $file)"
     done
 }
