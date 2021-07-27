@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Don't run if nothing has been passed to wudo
+if [ -z "$@" ]; then
+    exit
+fi
+
 # Check to see if powershell exists
 if [ "$(command -v powershell.exe)" ]; then
     # Check to see if we're already in an elevated shell
