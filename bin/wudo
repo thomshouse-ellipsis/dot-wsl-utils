@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Don't run if nothing has been passed to wudo
-if [ -z "$@" ]; then
+if [[ -z "$@" ]]; then
     exit
 fi
 
