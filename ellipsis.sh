@@ -15,6 +15,9 @@ pkg.install() {
 
     # Remove old links
     pkg.unlink
+
+    # Initialize package
+    pkg.init
 }
 
 pkg.init() {
