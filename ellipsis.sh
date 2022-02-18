@@ -12,14 +12,26 @@ pkg.install() {
             echo -e 'echo "$OLDPWD" | grep -e "^/mnt/./Users/[^/]+?$" >/dev/null 2>&1 && cd\n' >> "$HOME/$rcfile"
         fi
     done
+
+    # Remove old links
+    pkg.unlink
+}
+
+pkg.init() {
+    # Add ellipsis bin to $PATH if it isn't there
+    if [ ! "$(command -v wudo)" ]; then
+        export PATH=$PKG_PATH/bin:$PATH
+    fi
 }
 
 pkg.link() {
-    fs.link_rfiles "$PKG_PATH/bin" "$ELLIPSIS_PATH/bin"
+    : # Package does not contain linkable files
 }
 
 pkg.unlink() {
     for file in "$PKG_PATH/bin"/*; do
-        rm "$ELLIPSIS_PATH/bin/$(basename $file)"
+        if [[ -f "$ELLIPSIS_PATH/bin/$(basename $file)" && -L "$ELLIPSIS_PATH/bin/$(basename $file)" ]]; then
+            rm "$ELLIPSIS_PATH/bin/$(basename $file)"
+        fi
     done
 }
