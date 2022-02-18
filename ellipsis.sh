@@ -4,7 +4,7 @@ pkg.install() {
     # Check for eligible .rc files
     for rcfile in .bashrc .zshrc .localrc; do
         # For each file, check to see if it exists, is not symlinked, and does not source ellipsis init
-        if [[ -f "$HOME/$rcfile" && ! -L "$HOME/$rcfile" && ! $(grep -Fxq "pwd [|].*mnt//.//Users/.*&&cd" "$HOME/$rcfile") ]]; then
+        if [[ -f "$HOME/$rcfile" && ! -L "$HOME/$rcfile" && ! $(grep -E "pwd [|].*mnt/.+/Users/.*&& cd" "$HOME/$rcfile") ]]; then
             # Ask to add the init script to each valid file
             # Add to the script if selected
             echo -e '\n# Redirect from WSL default directory since linux fs is faster' >> "$HOME/$rcfile"
