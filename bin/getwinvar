@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+case "$1" in
+    ALLUSERSPROFILE|APPDATA|COMMONPROGRAMFILES|CommonProgramW6432|COMSPEC|LOCALAPPDATA|PATH|PROGRAMDATA|PROGRAMFILES|ProgramW6432|SystemRoot|TEMP|TMP|USERPROFILE|WINDIR|PUBLIC|PSModulePath|OneDrive|DriverData|CD)
+        echo "$(wslpath -u "$(cmd.exe /C echo %$1% 2> /dev/null | sed -e 's/\r//g')")"
+        ;;
+    HOMEPATH|HOMEDRIVE|LOGONSERVER|PathExt|PROMPT|USERDOMAIN|USERDOMAIN_ROAMINGPROFILE|USERNAME|CMDCMDLINE|CMDEXTVERSION|COMPUTERNAME|DATE|TIME|ERRORLEVEL|PROCESSOR_IDENTIFIER|PROCESSOR_LEVEL|PROCESSOR_REVISION|NUMBER_OF_PROCESSORS|RANDOM|OS|SystemDrive)
+        echo "$(cmd.exe /C echo %$1% 2> /dev/null | sed -e 's/\r//g')"
+        ;;
+    COMMONPROGRAMFILES_X86)
+        echo "$(wslpath -u "$(cmd.exe /C echo %COMMONPROGRAMFILES\(x86\)% 2> /dev/null | sed -e 's/\r//g')")"
+        ;;
+    PROGRAMFILES_X86)
+        echo "$(wslpath -u "$(cmd.exe /C echo %PROGRAMFILES\(X86\)% 2> /dev/null | sed -e 's/\r//g')")"
+        ;;
+    *)
+        echo "Warning: Unknown environment variable $1. Output may not be reliable." >&2
+        echo "$(wslpath -u "$(cmd.exe /C echo %$1% 2> /dev/null | sed -e 's/\r//g')")"
+        ;;
+esac

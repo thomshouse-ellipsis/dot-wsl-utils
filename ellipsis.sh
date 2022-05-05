@@ -21,8 +21,8 @@ pkg.install() {
 }
 
 pkg.init() {
-    # Add ellipsis bin to $PATH if it isn't there
-    if [ ! "$(command -v wudo)" ]; then
+    # Add package bin to $PATH
+    if [ -d "$PKG_PATH/bin" ]; then
         export PATH=$PKG_PATH/bin:$PATH
     fi
 }
