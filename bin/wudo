@@ -11,15 +11,15 @@ if [ "$(command -v powershell.exe)" ]; then
     powershell.exe -command 'If (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole("BUILTIN\Administrators")) {exit 1}'
     if [ $? -ne 0 ]; then
         # Open WSL inside elevated PowerShell
+        tput smcup
         echo -e "\nOpening elevated PowerShell window to run the following command:\n    $@"
-        sleep 3
         powershell.exe "Start-Process -Verb runas -FilePath wsl -ArgumentList '-d', '$WSL_DISTRO_NAME', '--', '$@'"
         # Wait for user input in the original terminal...
-        sleep 1
         echo ""
         read -n 1 -s -r -p "When command has completed in PowerShell window, press any key to continue..."
         read -s -t 0.001 # Clear any extra keycodes (e.g. arrows)
         echo -e "\n"
+        tput rmcup
     else
         $@
     fi
